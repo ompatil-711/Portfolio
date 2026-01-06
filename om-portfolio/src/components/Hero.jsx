@@ -41,10 +41,9 @@ const Hero = () => {
     return () => clearInterval(typing);
   }, []);
 
-  // --- COPY EMAIL LOGIC ---
+  // --- COPY LOGIC ---
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
-    // UPDATED: Your specific email address
     navigator.clipboard.writeText("ompatilll.001@gmail.com");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -52,6 +51,7 @@ const Hero = () => {
 
   return (
     <section 
+      id="home" /* <--- CRITICAL FIX: ADDED ID HERE */
       onMouseMove={handleMouseMove}
       className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden bg-[#030014]"
     >
@@ -129,8 +129,12 @@ const Hero = () => {
                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute -inset-6 border border-white/5 rounded-full" />
                   <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute -inset-2 border-2 border-dotted border-green-500/20 rounded-full" />
                   
-                  <div className="relative w-36 h-36 rounded-full overflow-hidden border-2 border-white/10 bg-gradient-to-b from-white/5 to-transparent shadow-2xl">
-                    <img src="YOUR_STUDIO_PNG_PATH" alt="Om Patil" className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0" />
+                  <div className="relative w-48 h-48 rounded-full overflow-hidden border-2 border-white/10 bg-gradient-to-b from-white/5 to-transparent shadow-2xl">
+                    <img 
+                      src="/Profile1.jpeg" 
+                      alt="Om Patil" 
+                      className="w-full h-full object-cover object-top" 
+                    />
                   </div>
                   <div className="absolute -bottom-3 -right-3 p-2 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-xl flex items-center gap-2">
                     <Sparkles size={14} className="text-yellow-400 animate-pulse" />
@@ -139,15 +143,10 @@ const Hero = () => {
                 <h3 className="text-2xl font-bold text-white tracking-tighter uppercase italic">Full Stack Engineer</h3>
               </div>
 
-              {/* === COMMAND GRID (Updated Links) === */}
+              {/* === COMMAND GRID === */}
               <div className="grid grid-cols-2 gap-3 mt-2">
-                 
-                 {/* RESUME BUTTON */}
-                 <a 
-                   href="/Om_Patil_Resume.pdf" 
-                   target="_blank" 
-                   className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3 cursor-pointer"
-                 >
+                 {/* Resume */}
+                 <a href="/Om_Patil_Resume.pdf" target="_blank" className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3 cursor-pointer">
                     <div className="p-1.5 bg-blue-500/20 rounded-lg text-blue-400 group-hover:text-blue-300">
                        <FileText size={14} />
                     </div>
@@ -157,7 +156,7 @@ const Hero = () => {
                     </div>
                  </a>
                  
-                 {/* EMAIL BUTTON */}
+                 {/* Email */}
                  <button onClick={handleCopy} className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3 cursor-pointer">
                     <div className="p-1.5 bg-purple-500/20 rounded-lg text-purple-400 group-hover:text-purple-300">
                        {copied ? <Check size={14} /> : <Mail size={14} />}
@@ -168,13 +167,8 @@ const Hero = () => {
                     </div>
                  </button>
 
-                 {/* GITHUB BUTTON */}
-                 <a 
-                    href="https://github.com/ompatil-711" 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3"
-                 >
+                 {/* GitHub */}
+                 <a href="https://github.com/ompatil-711" target="_blank" rel="noreferrer" className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3">
                     <div className="p-1.5 bg-gray-500/20 rounded-lg text-gray-300 group-hover:text-white">
                        <Github size={14} />
                     </div>
@@ -184,13 +178,8 @@ const Hero = () => {
                     </div>
                  </a>
 
-                 {/* LINKEDIN BUTTON */}
-                 <a 
-                    href="https://www.linkedin.com/in/om-patil-57820a248/" 
-                    target="_blank"
-                    rel="noreferrer" 
-                    className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3"
-                 >
+                 {/* LinkedIn */}
+                 <a href="https://www.linkedin.com/in/om-patil-57820a248/" target="_blank" rel="noreferrer" className="group p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-3">
                     <div className="p-1.5 bg-blue-600/20 rounded-lg text-blue-500 group-hover:text-blue-400">
                        <Linkedin size={14} />
                     </div>
