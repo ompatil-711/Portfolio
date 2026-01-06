@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 const TechMarquee = () => {
-  const techs = ["React", "Next.js", "TypeScript", "Node.js", "Tailwind", "MongoDB", "Docker", "AWS"];
+  const techs = ["C++","HTML", "CSS" , "Javascript" , "React", "Next.js", "TypeScript", "Node.js", "Tailwind", "MongoDB", "Docker", "AWS","M.L"];
   return (
     <div className="w-full py-8 border-y border-white/5 bg-white/[0.02] relative overflow-hidden flex">
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#030014] via-transparent to-[#030014] pointer-events-none" />
