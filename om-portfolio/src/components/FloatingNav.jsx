@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, User, Layers, Github, Linkedin, Mail, Check, Award } from 'lucide-react';
+// 1. Import the Download icon
+import { Home, User, Layers, Github, Linkedin, Mail, Check, Award, Download } from 'lucide-react';
 
 const FloatingNav = () => {
   const [activeTab, setActiveTab] = useState('home');
@@ -22,13 +23,11 @@ const FloatingNav = () => {
   // --- ROBUST SCROLL SPY LOGIC ---
   useEffect(() => {
     const handleScroll = () => {
-      // 1. Force "Home" if we are very close to the top (handling mobile bounce)
       if (window.scrollY < 100) {
         setActiveTab('home');
         return;
       }
 
-      // 2. Find which section is closest to the center of the viewport
       let currentSection = 'home';
       let minDistance = Infinity;
 
@@ -36,7 +35,6 @@ const FloatingNav = () => {
         const section = document.getElementById(link.id);
         if (section) {
           const rect = section.getBoundingClientRect();
-          // Distance from the center of the viewport (window.innerHeight / 2) to the center of the section
           const sectionCenter = rect.top + rect.height / 2;
           const viewportCenter = window.innerHeight / 2;
           const distance = Math.abs(viewportCenter - sectionCenter);
@@ -66,11 +64,9 @@ const FloatingNav = () => {
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     if (element) {
-      // Smooth scroll with offset for the fixed header
       const offset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
-
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth',
@@ -138,6 +134,19 @@ const FloatingNav = () => {
              </a>
            ))}
 
+           {/* --- NEW RESUME DOWNLOAD BUTTON --- */}
+           <a
+             href="/Om_Patil_Resume.pdf"
+             download="Om_Patil_Resume.pdf"
+             className="relative p-3 rounded-full text-gray-400 hover:text-green-400 hover:bg-white/5 transition-all group"
+           >
+              <Download size={18} />
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-black border border-white/10 rounded-md text-[9px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                Resume
+              </span>
+           </a>
+
+           {/* Email Copy Button */}
            <button
              onClick={handleCopyEmail}
              className="relative p-3 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-all group"
