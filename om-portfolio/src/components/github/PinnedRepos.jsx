@@ -5,20 +5,44 @@ const PinnedRepos = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 1. YOUR PRIORITY REPOS (Exact Names from GitHub)
+  // These will ALWAYS appear first if they exist.
+  const PRIORITY_NAMES = [
+    "ZenChat", 
+    "Agro-Aid-Portfolio"
+  ];
+
   useEffect(() => {
-    // Fetch real data from GitHub API
     const fetchRepos = async () => {
       try {
-        const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=pushed&per_page=100');
-        const data = await response.json();
+        const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=updated&per_page=100');
+        const allRepos = await response.json();
         
-        // Filter: No forks, Sort by Stars, Take Top 4
-        const topRepos = data
-          .filter(repo => !repo.fork) // Remove this line if you want to show forked repos
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
-          .slice(0, 4);
+        // 2. Separate Priority Repos from the rest
+        const priorityRepos = [];
+        const otherRepos = [];
 
-        setRepos(topRepos);
+        allRepos.forEach(repo => {
+          if (PRIORITY_NAMES.includes(repo.name)) {
+            priorityRepos.push(repo);
+          } else if (!repo.fork) { // Optional: Exclude forks from the fillers
+            otherRepos.push(repo);
+          }
+        });
+
+        // 3. Sort Priority Repos to match your manual order
+        priorityRepos.sort((a, b) => {
+          return PRIORITY_NAMES.indexOf(a.name) - PRIORITY_NAMES.indexOf(b.name);
+        });
+
+        // 4. Sort the "Other" repos by Stars (Highest first)
+        otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+        // 5. COMBINE: Priority + Top Others to get exactly 4
+        // If you only have 2 priority repos, it grabs the top 2 others to fill the gap.
+        const finalSelection = [...priorityRepos, ...otherRepos].slice(0, 4);
+
+        setRepos(finalSelection);
       } catch (error) {
         console.error("Error fetching repos:", error);
       } finally {
@@ -39,7 +63,7 @@ const PinnedRepos = () => {
 
   return (
     <div className="w-full py-8">
-      <h3 className="text-xl font-bold text-white mb-6">Top Repositories</h3>
+      <h3 className="text-xl font-bold text-white mb-6">Pinned Repositories</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {repos.map((repo) => (
           <a 
