@@ -1,28 +1,85 @@
-import { Github, Star, GitFork } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Book, Star, GitFork, ExternalLink, Loader2 } from 'lucide-react';
 
 const PinnedRepos = () => {
-  const repos = [
-    { name: "ZenChat", desc: "Real-time messaging engine", lang: "TypeScript", color: "bg-[#3178c6]", star: 1, fork: 0 },
-    { name: "Agro-Aid", desc: "ML precision agriculture", lang: "Jupyter", color: "bg-[#DA5B0B]", star: 0, fork: 0 },
-    { name: "Portfolio", desc: "React Portfolio", lang: "JavaScript", color: "bg-[#f1e05a]", star: 0, fork: 0 },
-  ];
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch real data from GitHub API
+    const fetchRepos = async () => {
+      try {
+        const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=pushed&per_page=100');
+        const data = await response.json();
+        
+        // Filter: No forks, Sort by Stars, Take Top 4
+        const topRepos = data
+          .filter(repo => !repo.fork) // Remove this line if you want to show forked repos
+          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .slice(0, 4);
+
+        setRepos(topRepos);
+      } catch (error) {
+        console.error("Error fetching repos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="animate-spin text-green-500" size={32} />
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-8">
-      <h3 className="text-sm font-bold text-gray-300 mb-4 uppercase tracking-widest text-[10px]">Top Repositories</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {repos.map((repo, i) => (
-          <div key={i} className="p-4 rounded-xl bg-[#161b22] border border-white/5 hover:border-white/20 transition-all group">
-            <div className="flex items-center gap-2 mb-2"><Github size={16} className="text-gray-400 group-hover:text-green-400" /><span className="font-bold text-white text-sm">{repo.name}</span></div>
-            <p className="text-xs text-gray-400 mb-4 h-8 line-clamp-2">{repo.desc}</p>
-            <div className="flex items-center justify-between text-xs text-gray-500">
-             <div className="flex items-center gap-2"><div className={`w-2 h-2 rounded-full ${repo.color}`} />{repo.lang}</div>
-             <div className="flex gap-2"><span className="flex items-center gap-1"><Star size={12} />{repo.star}</span><span className="flex items-center gap-1"><GitFork size={12} />{repo.fork}</span></div>
+    <div className="w-full py-8">
+      <h3 className="text-xl font-bold text-white mb-6">Top Repositories</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {repos.map((repo) => (
+          <a 
+            key={repo.id} 
+            href={repo.html_url} 
+            target="_blank" 
+            rel="noreferrer"
+            className="group flex flex-col p-4 rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 hover:bg-white/10 transition-all"
+          >
+            <div className="flex items-center justify-between mb-3">
+               <div className="flex items-center gap-2 text-white font-bold">
+                 <Book size={16} className="text-gray-400 group-hover:text-green-400" />
+                 {repo.name}
+               </div>
+               <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 text-gray-400 transition-opacity" />
             </div>
-          </div>
+
+            <p className="text-sm text-gray-400 flex-1 mb-4 line-clamp-2">
+              {repo.description || "No description provided."}
+            </p>
+
+            <div className="flex items-center gap-4 text-xs font-mono text-gray-500">
+               {repo.language && (
+                 <span className="flex items-center gap-1">
+                   <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                   {repo.language}
+                 </span>
+               )}
+               <span className="flex items-center gap-1">
+                 <Star size={12} /> {repo.stargazers_count}
+               </span>
+               <span className="flex items-center gap-1">
+                 <GitFork size={12} /> {repo.forks_count}
+               </span>
+            </div>
+          </a>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default PinnedRepos;

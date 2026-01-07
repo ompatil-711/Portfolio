@@ -1,18 +1,87 @@
-const LanguagesBar = () => (
-  <div className="mt-8 mb-8">
-    <h3 className="text-sm font-bold text-gray-300 mb-3 uppercase tracking-widest text-[10px]">Language Distribution</h3>
-    <div className="flex h-1.5 rounded-full overflow-hidden w-full bg-[#161b22]">
-      <div className="bg-[#f1e05a] w-[55%]" />
-      <div className="bg-[#3178c6] w-[25%]" />
-      <div className="bg-[#3572A5] w-[15%]" />
-      <div className="bg-[#f34b7d] w-[5%]" />
+import React, { useState, useEffect } from 'react';
+
+const LanguagesBar = () => {
+  const [languages, setLanguages] = useState([]);
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const response = await fetch('https://api.github.com/users/ompatil-711/repos?per_page=100');
+        const data = await response.json();
+        
+        // Calculate Language Usage Frequency
+        const langMap = {};
+        let total = 0;
+
+        data.forEach(repo => {
+          if (repo.language) {
+            langMap[repo.language] = (langMap[repo.language] || 0) + 1;
+            total++;
+          }
+        });
+
+        // Convert to array and sort by usage
+        const langArray = Object.keys(langMap)
+          .map(lang => ({
+            name: lang,
+            count: langMap[lang],
+            percent: ((langMap[lang] / total) * 100).toFixed(1)
+          }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5); // Take top 5
+
+        setLanguages(langArray);
+      } catch (error) {
+        console.error("Error fetching languages:", error);
+      }
+    };
+
+    fetchLanguages();
+  }, []);
+
+  // Color mapping for common languages
+  const colors = {
+    JavaScript: "#f1e05a",
+    TypeScript: "#2b7489",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    Python: "#3572A5",
+    "C++": "#f34b7d",
+    Java: "#b07219",
+    // Fallback color
+    default: "#ccc"
+  };
+
+  return (
+    <div className="w-full py-6 border-b border-white/5">
+       <h3 className="text-xl font-bold text-white mb-4">Most Used Languages</h3>
+       
+       {/* The Bar */}
+       <div className="flex w-full h-3 rounded-full overflow-hidden mb-4">
+          {languages.map((lang) => (
+            <div 
+              key={lang.name}
+              style={{ width: `${lang.percent}%`, backgroundColor: colors[lang.name] || colors.default }}
+              className="h-full"
+            />
+          ))}
+       </div>
+
+       {/* The Legend */}
+       <div className="flex flex-wrap gap-4">
+          {languages.map((lang) => (
+             <div key={lang.name} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full" 
+                  style={{ backgroundColor: colors[lang.name] || colors.default }} 
+                />
+                <span className="text-sm font-bold text-gray-300">{lang.name}</span>
+                <span className="text-xs font-mono text-gray-500">{lang.percent}%</span>
+             </div>
+          ))}
+       </div>
     </div>
-    <div className="flex flex-wrap gap-4 mt-3 text-[10px] text-gray-500 font-mono uppercase">
-      <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#f1e05a]" /> JS 55%</div>
-      <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#3178c6]" /> TS 25%</div>
-      <div className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-[#3572A5]" /> Python 15%</div>
-    </div>
-  </div>
-);
+  );
+};
 
 export default LanguagesBar;
