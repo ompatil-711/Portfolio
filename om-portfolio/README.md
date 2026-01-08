@@ -1,16 +1,41 @@
-# React + Vite
+# ⚡ Interactive Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Portfolio Preview](public/screenshot.png)
 
-Currently, two official plugins are available:
+> **Live Demo:** [https://ompatil.site](https://ompatil.site)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A high-performance, immersive developer portfolio built with **React**, **Vite**, and **Framer Motion**. Designed to showcase my projects, technical expertise, and real-time GitHub activity with velocity-based animations and a modern dark aesthetic.
 
-## React Compiler
+## 🚀 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Velocity-Based Animations:** Smooth, physics-based scrolling effects using `framer-motion` (scroll velocity, parallax).
+* **Bento Grid Layout:** A responsive, modular grid system for displaying tech stacks and social links.
+* **Real-Time Data:** Fetches and visualizes live GitHub commit history and activity using GitHub APIs.
+* **High Performance:** Optimized with Vite for lightning-fast builds and almost zero load times.
+* **Responsive Design:** Fully fluid layout that adapts perfectly from 4K desktops to mobile devices.
+* **Dynamic Components:** Reusable card components with hover states, tilt effects, and stacking interactions.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **Framework:** [React.js](https://react.dev/) (Vite)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **Animations:** [Framer Motion](https://www.framer.com/motion/)
+* **Icons:** [Lucide React](https://lucide.dev/)
+* **Deployment:** [Vercel](https://vercel.com/)
+* **Domain Management:** GoDaddy
+
+## 📂 Project Structure
+
+```bash
+├── public/              # Static assets (images, resume)
+├── src/
+│   ├── components/      # Reusable UI components
+│   │   ├── BentoGrid.jsx    # The main tech stack grid
+│   │   ├── GithubStats.jsx  # Live GitHub activity graph
+│   │   ├── Hero.jsx         # Landing section with animations
+│   │   ├── Projects.jsx     # Stacking cards for projects
+│   │   └── ...
+│   ├── App.jsx          # Main application layout
+│   └── main.jsx         # Entry point
+├── package.json         # Dependencies and scripts
+└── vite.config.js       # Vite configuration
