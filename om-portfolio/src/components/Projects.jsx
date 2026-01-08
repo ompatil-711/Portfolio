@@ -11,7 +11,7 @@ const projects = [
     tags: ["React", "Node.js", "Socket.io", "RabbitMQ", "MERN"],
     color: "#22c55e", 
     icon: MessageCircle,
-    repoLink: "https://github.com/ompatil-711", 
+    repoLink: "https://github.com/ompatil-711/ZenChat.git", 
     demoLink: "https://zenchat.online", 
     image: "/ZenChat.png" // <--- UPDATED PATH
   },
@@ -21,7 +21,7 @@ const projects = [
     tags: ["JavaScript", "Machine Learning", "HTML5/CSS3", "API Integration"],
     color: "#eab308", 
     icon: Leaf,
-    repoLink: "https://github.com/ompatil-711/Agro-Aid-Portfolio", 
+    repoLink: "https://github.com/ompatil-711/Agro-Aid-Portfolio.git", 
     demoLink: "https://ompatil-711.github.io/Agro-Aid-Portfolio/", 
     image: "/Agro-Aid.png" // <--- UPDATED PATH
   }
