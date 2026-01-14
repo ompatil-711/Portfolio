@@ -14,6 +14,7 @@ A high-performance, immersive developer portfolio built with **React**, **Vite**
 * **High Performance:** Optimized with Vite for lightning-fast builds and almost zero load times.
 * **Responsive Design:** Fully fluid layout that adapts perfectly from 4K desktops to mobile devices.
 * **Dynamic Components:** Reusable card components with hover states, tilt effects, and stacking interactions.
+* 
 
 ## 🛠️ Tech Stack
 
