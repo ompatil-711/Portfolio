@@ -7,6 +7,7 @@
 
 A high-performance, immersive developer portfolio built with **React**, **Vite**, and **Framer Motion**. Designed to showcase my projects, technical expertise, and real-time GitHub activity with velocity-based animations and a modern dark aesthetic.
 
+
 ## 🚀 Key Features
 
 * **Velocity-Based Animations:** Smooth, physics-based scrolling effects using `framer-motion` (scroll velocity, parallax).
