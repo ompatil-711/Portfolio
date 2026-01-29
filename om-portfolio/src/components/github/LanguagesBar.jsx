@@ -1,43 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const LanguagesBar = () => {
-  const [languages, setLanguages] = useState([]);
-
-  useEffect(() => {
-    const fetchLanguages = async () => {
-      try {
-        const response = await fetch('https://api.github.com/users/ompatil-711/repos?per_page=100');
-        const data = await response.json();
-        
-        // Calculate Language Usage Frequency
-        const langMap = {};
-        let total = 0;
-
-        data.forEach(repo => {
-          if (repo.language) {
-            langMap[repo.language] = (langMap[repo.language] || 0) + 1;
-            total++;
-          }
-        });
-
-        // Convert to array and sort by usage
-        const langArray = Object.keys(langMap)
-          .map(lang => ({
-            name: lang,
-            count: langMap[lang],
-            percent: ((langMap[lang] / total) * 100).toFixed(1)
-          }))
-          .sort((a, b) => b.count - a.count)
-          .slice(0, 5); // Take top 5
-
-        setLanguages(langArray);
-      } catch (error) {
-        console.error("Error fetching languages:", error);
-      }
-    };
-
-    fetchLanguages();
-  }, []);
+  // Hardcoded data to bypass API rate limits
+  const languages = [
+    { name: 'JavaScript', percent: 45.5, count: 50 },
+    { name: 'HTML', percent: 25.0, count: 30 },
+    { name: 'CSS', percent: 20.0, count: 25 },
+    { name: 'Python', percent: 5.5, count: 10 },
+    { name: 'Java', percent: 4.0, count: 5 }
+  ];
 
   // Color mapping for common languages
   const colors = {
@@ -48,7 +19,6 @@ const LanguagesBar = () => {
     Python: "#3572A5",
     "C++": "#f34b7d",
     Java: "#b07219",
-    // Fallback color
     default: "#ccc"
   };
 
