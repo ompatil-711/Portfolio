@@ -5,43 +5,47 @@ const PinnedRepos = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. YOUR PRIORITY REPOS (These will ALWAYS appear first)
+  // 1. ADD YOUR MISSING REPO NAMES HERE
+  // The code will ALWAYS show these specific repos first.
   const PRIORITY_NAMES = [
     "ZenChat", 
     "Agro-Aid-Portfolio", 
-    "Portfolio"
+    "Portfolio",
+    // Add the names of your other 3 repos here exactly as they appear on GitHub:
+    // "Project-Name-4",
+    // "Project-Name-5",
+    // "Project-Name-6"
   ];
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        // Fetch all public repositories (sorted by last updated)
+        // Fetch all repos (increased limit to ensure we find everything)
         const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=updated&per_page=100');
         const allRepos = await response.json();
         
-        // 2. SEPARATE: Find your priority repos vs. the rest
         const priorityRepos = [];
         const otherRepos = [];
 
         allRepos.forEach(repo => {
           if (PRIORITY_NAMES.includes(repo.name)) {
             priorityRepos.push(repo);
-          } else if (!repo.fork) { 
-            // Optional: Exclude forks to show only your original work
+          } else {
+            // CHANGE: We now include EVERYTHING (even forks) to make sure you get 6 items
             otherRepos.push(repo);
           }
         });
 
-        // 3. SORT: 
-        // A. Sort Priority repos to match your manual list order
+        // SORTING
+        // 1. Sort Priority repos by your manual order
         priorityRepos.sort((a, b) => {
           return PRIORITY_NAMES.indexOf(a.name) - PRIORITY_NAMES.indexOf(b.name);
         });
 
-        // B. Sort the "Others" by Stars (Highest first)
+        // 2. Sort the rest by Stars (so the best remaining ones show up)
         otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
 
-        // 4. COMBINE: Take Priority repos + Top "Other" repos to make 6 total
+        // COMBINE: Take Priority + Others to get exactly 6
         const finalSelection = [...priorityRepos, ...otherRepos].slice(0, 6);
 
         setRepos(finalSelection);
