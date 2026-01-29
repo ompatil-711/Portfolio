@@ -1,10 +1,12 @@
 # ⚡ Interactive Developer Portfolio
 
+
 ![Portfolio Preview](public/Portfolio.png)
 
 > **Live Demo:** [https://ompatil.site](https://ompatil.site)
 
 A high-performance, immersive developer portfolio built with **React**, **Vite**, and **Framer Motion**. Designed to showcase my projects, technical expertise, and real-time GitHub activity with velocity-based animations and a modern dark aesthetic.
+
 
 ## 🚀 Key Features
 
