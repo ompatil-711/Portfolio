@@ -1,46 +1,50 @@
-import React from 'react';
-import { Book, Star, GitFork, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Book, Star, GitFork, ExternalLink, Loader2 } from 'lucide-react';
 
 const PinnedRepos = () => {
-  // Hardcoded repositories to bypass API rate limits
-  const repos = [
-    {
-      id: 1,
-      name: "ZenChat",
-      html_url: "https://github.com/ompatil-711/ZenChat",
-      description: "A real-time messaging application built with MERN stack and Socket.io for instant communication.",
-      language: "JavaScript",
-      stargazers_count: 12,
-      forks_count: 4
-    },
-    {
-      id: 2,
-      name: "Agro-Aid-Portfolio",
-      html_url: "https://github.com/ompatil-711/Agro-Aid-Portfolio",
-      description: "AI-powered agricultural assistant designed to help farmers detect crop diseases early.",
-      language: "Python",
-      stargazers_count: 8,
-      forks_count: 2
-    },
-    {
-        id: 3,
-        name: "Portfolio",
-        html_url: "https://github.com/ompatil-711/Portfolio",
-        description: "My personal developer portfolio built with React, Vite, and Tailwind CSS.",
-        language: "JavaScript",
-        stargazers_count: 5,
-        forks_count: 1
-    },
-    {
-        id: 4,
-        name: "E-Commerce-API",
-        html_url: "https://github.com/ompatil-711/E-Commerce-API", // Example URL, replace if needed
-        description: "A robust backend API for e-commerce platforms handling payments and inventory.",
-        language: "Node.js",
-        stargazers_count: 3,
-        forks_count: 0
-    }
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 1. EXACT NAMES of the repos you want to show (Case Sensitive)
+  const SHOW_ONLY = [
+    "ZenChat", 
+    "Agro-Aid-Portfolio", 
+    "Portfolio"
   ];
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        // Fetch all your public repositories
+        const response = await fetch('https://api.github.com/users/ompatil-711/repos?per_page=100');
+        const allRepos = await response.json();
+        
+        // 2. FILTER: Keep ONLY the projects listed in SHOW_ONLY
+        const myTopRepos = allRepos.filter(repo => SHOW_ONLY.includes(repo.name));
+
+        // 3. SORT: Sort them in the order you listed in SHOW_ONLY
+        myTopRepos.sort((a, b) => {
+          return SHOW_ONLY.indexOf(a.name) - SHOW_ONLY.indexOf(b.name);
+        });
+
+        setRepos(myTopRepos);
+      } catch (error) {
+        console.error("Error fetching repos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="animate-spin text-green-500" size={32} />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full py-8">
@@ -73,10 +77,11 @@ const PinnedRepos = () => {
                    {repo.language}
                  </span>
                )}
-               <span className="flex items-center gap-1">
+               {/* REAL DATA: These numbers come directly from GitHub */}
+               <span className="flex items-center gap-1 group-hover:text-yellow-400 transition-colors">
                  <Star size={12} /> {repo.stargazers_count}
                </span>
-               <span className="flex items-center gap-1">
+               <span className="flex items-center gap-1 group-hover:text-blue-400 transition-colors">
                  <GitFork size={12} /> {repo.forks_count}
                </span>
             </div>
