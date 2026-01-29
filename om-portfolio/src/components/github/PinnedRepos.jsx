@@ -5,8 +5,8 @@ const PinnedRepos = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. EXACT NAMES of the repos you want to show (Case Sensitive)
-  const SHOW_ONLY = [
+  // 1. YOUR PRIORITY REPOS (These will ALWAYS appear first)
+  const PRIORITY_NAMES = [
     "ZenChat", 
     "Agro-Aid-Portfolio", 
     "Portfolio"
@@ -15,19 +15,36 @@ const PinnedRepos = () => {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        // Fetch all your public repositories
-        const response = await fetch('https://api.github.com/users/ompatil-711/repos?per_page=100');
+        // Fetch all public repositories (sorted by last updated)
+        const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=updated&per_page=100');
         const allRepos = await response.json();
         
-        // 2. FILTER: Keep ONLY the projects listed in SHOW_ONLY
-        const myTopRepos = allRepos.filter(repo => SHOW_ONLY.includes(repo.name));
+        // 2. SEPARATE: Find your priority repos vs. the rest
+        const priorityRepos = [];
+        const otherRepos = [];
 
-        // 3. SORT: Sort them in the order you listed in SHOW_ONLY
-        myTopRepos.sort((a, b) => {
-          return SHOW_ONLY.indexOf(a.name) - SHOW_ONLY.indexOf(b.name);
+        allRepos.forEach(repo => {
+          if (PRIORITY_NAMES.includes(repo.name)) {
+            priorityRepos.push(repo);
+          } else if (!repo.fork) { 
+            // Optional: Exclude forks to show only your original work
+            otherRepos.push(repo);
+          }
         });
 
-        setRepos(myTopRepos);
+        // 3. SORT: 
+        // A. Sort Priority repos to match your manual list order
+        priorityRepos.sort((a, b) => {
+          return PRIORITY_NAMES.indexOf(a.name) - PRIORITY_NAMES.indexOf(b.name);
+        });
+
+        // B. Sort the "Others" by Stars (Highest first)
+        otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+        // 4. COMBINE: Take Priority repos + Top "Other" repos to make 6 total
+        const finalSelection = [...priorityRepos, ...otherRepos].slice(0, 6);
+
+        setRepos(finalSelection);
       } catch (error) {
         console.error("Error fetching repos:", error);
       } finally {
@@ -77,7 +94,6 @@ const PinnedRepos = () => {
                    {repo.language}
                  </span>
                )}
-               {/* REAL DATA: These numbers come directly from GitHub */}
                <span className="flex items-center gap-1 group-hover:text-yellow-400 transition-colors">
                  <Star size={12} /> {repo.stargazers_count}
                </span>
