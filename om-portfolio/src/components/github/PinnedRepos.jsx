@@ -1,65 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { Book, Star, GitFork, ExternalLink, Loader2 } from 'lucide-react';
+import React from 'react';
+import { Book, Star, GitFork, ExternalLink } from 'lucide-react';
 
 const PinnedRepos = () => {
-  const [repos, setRepos] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // 1. YOUR PRIORITY REPOS (Exact Names from GitHub)
-  // These will ALWAYS appear first if they exist.
-  const PRIORITY_NAMES = [
-    "ZenChat", 
-    "Agro-Aid-Portfolio"
+  // Hardcoded repositories to bypass API rate limits
+  const repos = [
+    {
+      id: 1,
+      name: "ZenChat",
+      html_url: "https://github.com/ompatil-711/ZenChat",
+      description: "A real-time messaging application built with MERN stack and Socket.io for instant communication.",
+      language: "JavaScript",
+      stargazers_count: 12,
+      forks_count: 4
+    },
+    {
+      id: 2,
+      name: "Agro-Aid-Portfolio",
+      html_url: "https://github.com/ompatil-711/Agro-Aid-Portfolio",
+      description: "AI-powered agricultural assistant designed to help farmers detect crop diseases early.",
+      language: "Python",
+      stargazers_count: 8,
+      forks_count: 2
+    },
+    {
+        id: 3,
+        name: "Portfolio",
+        html_url: "https://github.com/ompatil-711/Portfolio",
+        description: "My personal developer portfolio built with React, Vite, and Tailwind CSS.",
+        language: "JavaScript",
+        stargazers_count: 5,
+        forks_count: 1
+    },
+    {
+        id: 4,
+        name: "E-Commerce-API",
+        html_url: "https://github.com/ompatil-711/E-Commerce-API", // Example URL, replace if needed
+        description: "A robust backend API for e-commerce platforms handling payments and inventory.",
+        language: "Node.js",
+        stargazers_count: 3,
+        forks_count: 0
+    }
   ];
-
-  useEffect(() => {
-    const fetchRepos = async () => {
-      try {
-        const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=updated&per_page=100');
-        const allRepos = await response.json();
-        
-        // 2. Separate Priority Repos from the rest
-        const priorityRepos = [];
-        const otherRepos = [];
-
-        allRepos.forEach(repo => {
-          if (PRIORITY_NAMES.includes(repo.name)) {
-            priorityRepos.push(repo);
-          } else if (!repo.fork) { // Optional: Exclude forks from the fillers
-            otherRepos.push(repo);
-          }
-        });
-
-        // 3. Sort Priority Repos to match your manual order
-        priorityRepos.sort((a, b) => {
-          return PRIORITY_NAMES.indexOf(a.name) - PRIORITY_NAMES.indexOf(b.name);
-        });
-
-        // 4. Sort the "Other" repos by Stars (Highest first)
-        otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
-
-        // 5. COMBINE: Priority + Top Others to get exactly 4
-        // If you only have 2 priority repos, it grabs the top 2 others to fill the gap.
-        const finalSelection = [...priorityRepos, ...otherRepos].slice(0, 4);
-
-        setRepos(finalSelection);
-      } catch (error) {
-        console.error("Error fetching repos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRepos();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center py-10">
-        <Loader2 className="animate-spin text-green-500" size={32} />
-      </div>
-    );
-  }
 
   return (
     <div className="w-full py-8">
