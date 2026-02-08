@@ -5,50 +5,35 @@ const PinnedRepos = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. ADD YOUR MISSING REPO NAMES HERE
-  // The code will ALWAYS show these specific repos first.
+  // UPDATED: This list now matches your GitHub profile screenshot exactly
   const PRIORITY_NAMES = [
-    "ZenChat", 
-    "Agro-Aid-Portfolio", 
-    "Portfolio",
-    // Add the names of your other 3 repos here exactly as they appear on GitHub:
-    // "Project-Name-4",
-    // "Project-Name-5",
-    // "Project-Name-6"
+    "ompatil-711",             // 1. Your Profile Repo
+    ".coding",                 // 2. DSA / C++
+    "Mini_Project-JavaScript", // 3. JS Projects
+    "Agro-Aid-Portfolio",      // 4. Agro Aid
+    "ZenChat",                 // 5. ZenChat
+    "Portfolio"                // 6. This Portfolio
   ];
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        // Fetch all repos (increased limit to ensure we find everything)
+        // Fetch all repos
         const response = await fetch('https://api.github.com/users/ompatil-711/repos?sort=updated&per_page=100');
         const allRepos = await response.json();
         
-        const priorityRepos = [];
-        const otherRepos = [];
-
-        allRepos.forEach(repo => {
-          if (PRIORITY_NAMES.includes(repo.name)) {
-            priorityRepos.push(repo);
-          } else {
-            // CHANGE: We now include EVERYTHING (even forks) to make sure you get 6 items
-            otherRepos.push(repo);
+        // Filter specifically for the repos in our PRIORITY list
+        // This ensures we get exactly the 6 you want, in the right order
+        const pinnedRepos = [];
+        
+        PRIORITY_NAMES.forEach(name => {
+          const repo = allRepos.find(r => r.name === name);
+          if (repo) {
+            pinnedRepos.push(repo);
           }
         });
 
-        // SORTING
-        // 1. Sort Priority repos by your manual order
-        priorityRepos.sort((a, b) => {
-          return PRIORITY_NAMES.indexOf(a.name) - PRIORITY_NAMES.indexOf(b.name);
-        });
-
-        // 2. Sort the rest by Stars (so the best remaining ones show up)
-        otherRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
-
-        // COMBINE: Take Priority + Others to get exactly 6
-        const finalSelection = [...priorityRepos, ...otherRepos].slice(0, 6);
-
-        setRepos(finalSelection);
+        setRepos(pinnedRepos);
       } catch (error) {
         console.error("Error fetching repos:", error);
       } finally {
